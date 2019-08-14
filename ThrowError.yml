@@ -1,0 +1,7 @@
+parameters:
+  ErrorReason: undefined error
+
+steps:
+  - powershell: |
+        Write-Host "##vso[task.complete result=Failed;]"
+        Write-Host "##vso[task.logissue type=error;]Task failed with reason ${{ parameters.ErrorReason }}"
