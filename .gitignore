@@ -1,0 +1,5 @@
+**/launch.json
+*.app
+*.g.xlf
+**/rad.json
+permissionsAnalyzer.json
