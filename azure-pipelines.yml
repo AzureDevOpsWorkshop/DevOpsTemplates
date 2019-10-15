@@ -1,0 +1,1 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)[$(Build.BuildId)]
