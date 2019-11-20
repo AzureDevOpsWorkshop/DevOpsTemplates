@@ -1,0 +1,26 @@
+{
+  "id": "c15721de-0d7f-4d23-b87e-2803a630272d",
+  "name": "DevOpsWorkshop",
+  "publisher": "1ClickFactory",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "14.0.0.0",
+  "application": "14.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50149
+    }
+  ],
+  "contextSensitiveHelpUrl": "https://DevOpsWorkshop.com/help/",
+  "showMyCode": true,
+  "runtime": "3.0"
+}

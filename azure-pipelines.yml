@@ -1,0 +1,75 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)[$(Build.BuildId)]
+variables:
+ - group: AzureKeyVault
+ - name: DockerImage
+   value: mcr.microsoft.com/businesscentral/sandbox:14.5.35970.37061
+ - name: ContainerName
+   value: demo-$(Build.BuildId)
+ - name: JobPoolName
+   value: DevOpsDemo
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildApp
+        workspace:
+          clean: all
+        pool: $(JobPoolName)
+        displayName: Build App
+        steps:
+        - task: PowerShell@2
+          displayName: Install navcontainerhelper
+          inputs:
+            targetType: inline
+            script: Install-Module navcontainerhelper
+        - task: DownloadSecureFile@1
+          displayName: Downloading license
+          name: license
+          inputs:
+            secureFile: DockerLicense
+        - task: PowerShell@2
+          displayName: Create Build Container
+          env:
+            DockerUser: $(DockerUser)
+            DockerPassword: $(DockerPassword)
+          inputs:
+            targetType: filePath
+            filePath: scripts\CreateContainer.ps1
+        - task: PowerShell@2
+          displayName: Update version
+          inputs:
+            targetType: filePath
+            filePath: scripts\UpdateAppVersion.ps1
+            arguments: '-buildProjectFolder "$(Build.Repository.LocalPath)\app"'          
+        - task: PowerShell@2
+          displayName: Compile App
+          env:
+            DockerUser: $(DockerUser)
+            DockerPassword: $(DockerPassword)
+          inputs:
+            targetType: filePath
+            filePath: scripts\CompileApp.ps1
+            arguments: '-buildProjectFolder "$(Build.Repository.LocalPath)\app" -buildOutputFolder "$(Build.ArtifactStagingDirectory)\app"'
+        - task: PowerShell@2
+          displayName: Tag run
+          inputs:
+            targetType: inline
+            script: Write-Host "##vso[build.addbuildtag]$(AppVersion)"
+        - task: PowerShell@2
+          displayName: Publish App
+          inputs:
+            targetType: filePath
+            filePath: scripts\PublishApp.ps1
+            arguments: '-buildArtifactFolder "$(Build.ArtifactStagingDirectory)\app"'
+        - powershell: Remove-NavContainer -containerName $(ContainerName)
+          displayName: Remove Build Container
+          condition: always()
+        - task: PublishPipelineArtifact@1
+          displayName: Publish App artifact
+          inputs:
+            path: $(Build.ArtifactStagingDirectory)\app
+            artifact: DemoApp
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish deployment scripts'
+          inputs:
+            targetPath: scripts\Release\PublishToAzureDocker.ps1
+            artifact: DeploymentScripts
