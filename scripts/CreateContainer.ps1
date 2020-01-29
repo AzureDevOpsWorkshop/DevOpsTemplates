@@ -10,6 +10,7 @@ $additionalParameters = @("--volume ""$($rootFolder):C:\agents""")
 New-NavContainer `
     -containerName 'd365bc-14' `
     -accept_eula `
+    -accept_outdated `
     -alwaysPull `
     -auth NavUserPassword `
     -Credential $credential `
