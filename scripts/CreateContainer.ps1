@@ -5,10 +5,10 @@ $licenseFile = $env:LICENSE_SECUREFILEPATH
 
 $segments = "$PSScriptRoot".Split('\')
 $rootFolder = "$($segments[0])\$($segments[1])"
-$additionalParameters = @("--volume ""$($rootFolder):C:\agents""")
+$additionalParameters = @("--volume ""$($rootFolder):C:\agent""")
 
 New-NavContainer `
-    -containerName 'd365bc-14' `
+    -containerName d365bc-14 `
     -accept_eula `
     -accept_outdated `
     -alwaysPull `
@@ -22,4 +22,5 @@ New-NavContainer `
     -updateHosts `
     -doNotExportObjectsToText `
     -doNotCheckHealth `
+    -EnableTaskScheduler:$false `
     -additionalParameters $additionalParameters
