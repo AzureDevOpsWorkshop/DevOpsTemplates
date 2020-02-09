@@ -1,3 +1,5 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)[$(Build.BuildId)]
-stages:
-  - stage: Build
+pool: DevOpsDemo  # your pool name goes here
+steps:
+  - powershell: Write-Host Hello build pipeline
+    displayName: Just some text from PowerShell
