@@ -6,7 +6,7 @@ Param(
 
 )
 $username = $env:DOCKERUSER
-$password = ConvertTo-SecureString -String $env:DOCKERPASSWORD -AsPlainText -Force 
+$password = ConvertTo-SecureString -String $env:DOCKERPASS -AsPlainText -Force 
 $credential = New-Object PSCredential -ArgumentList $username, $password
 
 Compile-AppInNavContainer `
